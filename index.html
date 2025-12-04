@@ -22,6 +22,8 @@
 
     <!-- CSV Parser (PapaParse) for robust Google Sheets parsing -->
     <script src="./papaparse.min.js"></script>
+    <!-- Generated programs data -->
+    <script src="./programs.js"></script>
 
     <script>
         tailwind.config = {
@@ -2686,65 +2688,6 @@
         const SHEET_ID = '12GNjcomxxU4NbXKwQ1Jq_eG7M7PLUlDlKAnBO4qwu5g';
         const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
 
-        async function loadData() {
-            // Показываем скелетоны
-            const grid = document.getElementById('catalogGrid');
-            grid.innerHTML = `
-                <div class="skeleton h-96"></div>
-                <div class="skeleton h-96"></div>
-                <div class="skeleton h-96"></div>
-            `;
-
-            try {
-                // Пробуем загрузить CSV
-                const response = await fetch(SHEET_CSV_URL);
-                if (!response.ok) throw new Error('Network response was not ok');
-                const csvText = await response.text();
-                
-                // Парсим CSV
-                const results = Papa.parse(csvText, { header: true, skipEmptyLines: true });
-                
-                // Маппинг данных из таблицы в структуру приложения
-                // Предполагаем, что в таблице есть определенные заголовки, но делаем фоллбек
-                programs = results.data.map((row, index) => {
-                    // Попытка умного маппинга (адаптируйте ключи под реальные заголовки таблицы)
-                    // Если в таблице заголовки на русском, используем их
-                    return {
-                        id: index + 100, // offset ID
-                        title: row['Program_Name'] || row['Название'] || row['title'] || "Без названия",
-                        fgos_code: row['FGOS_Code'] || row['Код'] || "—",
-                        fgos_name: row['FGOS_Name'] || row['Специальность'] || "",
-                        institution: row['Institution_Name'] || row['ВУЗ'] || "Не указан",
-                        district: row['District'] || row['ФО'] || "РФ",
-                        level: (row['Level'] || row['Уровень'] || "").includes('СПО') ? 'SPO' : 'VO',
-                        level_readable: (row['Level'] || row['Уровень'] || "").includes('СПО') ? 'Колледж' : 'Бакалавриат',
-                        base: row['Base'] || row['База'] || "11 классов",
-                        duration: row['Duration'] || row['Срок'] || "4 года",
-                        category: row['Category'] || row['Категория'] || "Общее",
-                        tags: (row['Tags'] || row['Теги'] || "Бюджет").split(',').map(t => t.trim()),
-                        places: parseInt(row['Places'] || row['Места'] || 0),
-                        salary: row['Salary'] || row['Зарплата'] || "по итогам",
-                        desc: row['Description'] || row['Описание'] || "Описание программы загружается...",
-                        // Генерируем цвет на основе категории (просто для визуала)
-                        color: ['blue', 'green', 'orange', 'purple', 'indigo'][index % 5],
-                        quiz_cat: "Tech" // Default fallback
-                    };
-                });
-
-                console.log("Loaded programs from Sheet:", programs.length);
-                
-                if (programs.length === 0) throw new Error("Empty sheet data");
-
-                showDataSource("");
-
-            } catch (error) {
-                console.warn("Failed to load Google Sheet data, using fallback.", error);
-                programs = fallbackPrograms;
-                showDataSource("Резервная база данных (Демо)");
-            } finally {
-                // Рендеринг
-                filterData();
-            }
         }
 
         function showDataSource(sourceName) {
@@ -3233,3 +3176,38 @@
     </script>
 
 </body></html>
+        async function loadData() {
+            // Показываем скелетоны
+            const grid = document.getElementById('catalogGrid');
+            grid.innerHTML = `
+                <div class="skeleton h-96"></div>
+                <div class="skeleton h-96"></div>
+                <div class="skeleton h-96"></div>
+            `;
+
+            try {
+                // Используем предварительно сгенерированные данные из programs.js
+                if (typeof programsFromCSV !== 'undefined' && programsFromCSV.length > 0) {
+                    programs = programsFromCSV.map((item, index) => {
+                        // Добавляем id к каждой программе
+                        return {
+                            id: index + 100, // offset ID
+                            ...item
+                        };
+                    });
+                    console.log("Loaded programs from CSV data:", programs.length);
+                    showDataSource("Данные из CSV файла");
+                } else {
+                    // Если данные не загружены, используем fallback
+                    throw new Error("No programs data available");
+                }
+
+            } catch (error) {
+                console.warn("Failed to load CSV data, using fallback.", error);
+                programs = fallbackPrograms;
+                showDataSource("Резервная база данных (Демо)");
+            } finally {
+                // Рендеринг
+                filterData();
+            }
+        }
