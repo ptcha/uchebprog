@@ -2708,27 +2708,49 @@
                 programs = results.data.map((row, index) => {
                     // Попытка умного маппинга (адаптируйте ключи под реальные заголовки таблицы)
                     // Если в таблице заголовки на русском, используем их
+                    // Обработка специальных значений из CSV
+                    const programName = row['program_name'] || row['Program_Name'] || row['Название'] || row['title'] || "Без названия";
+                    const institutionName = row['institution_name'] || row['Institution_Name'] || row['ВУЗ'] || "Не указан";
+                    const region = row['region'] || row['District'] || row['ФО'] || "РФ";
+                    const educationLevel = row['education_level'] || row['Level'] || row['Уровень'] || "";
+                    const budgetSeats = row['budget_seats'] || row['Tags'] || row['Теги'] || "Бюджет";
+                    const description = row['Description'] || row['Описание'] || "Описание программы загружается...";
+                    const macrogroupName = row['macrogroup_name'] || "Tech";
+                    
+                    // Проверяем, является ли значение специальным заполнителем
+                    const cleanProgramName = programName === "Не указано" ? "Без названия" : programName;
+                    const cleanInstitutionName = institutionName === "Учебное заведение не указано" || institutionName === "Настроить по ссузу" ? "Не указано" : institutionName;
+                    const cleanRegion = region === "Казань" && (institutionName === "Учебное заведение не указано" || programName === "Не указано") ? "РФ" : region;
+                    const cleanDescription = description === "Описание программы загружается..." ? "Описание программы будет добавлено позже" : description;
+                    const cleanBudgetSeats = budgetSeats === "15 мест (2025)" && programName === "Не указано" ? "Информация о местах" : budgetSeats;
+                    
+                    // Фильтруем строки, которые являются заглушками (у которых и название, и учебное заведение не указаны)
+                    if (programName === "Не указано" && (institutionName === "Учебное заведение не указано" || institutionName === "Настроить по ссузу")) {
+                        return null; // Пропускаем эту строку
+                    }
+                    
                     return {
                         id: parseInt(row['id']) || index + 100, // offset ID
-                        title: row['program_name'] || row['Program_Name'] || row['Название'] || row['title'] || "Без названия",
+                        title: cleanProgramName,
                         fgos_code: row['fgos_code'] || row['FGOS_Code'] || row['Код'] || "—",
                         fgos_name: row['fgos_name'] || row['FGOS_Name'] || row['Специальность'] || "",
-                        institution: row['institution_name'] || row['Institution_Name'] || row['ВУЗ'] || "Не указан",
-                        district: row['region'] || row['District'] || row['ФО'] || "РФ",
-                        level: (row['education_level'] || row['Level'] || row['Уровень'] || "").includes('СПО') ? 'SPO' : 'VO',
-                        level_readable: (row['education_level'] || row['Level'] || row['Уровень'] || "").includes('СПО') ? 'Колледж' : 'Бакалавриат',
+                        institution: cleanInstitutionName,
+                        district: cleanRegion,
+                        level: educationLevel.includes('СПО') ? 'SPO' : 'VO',
+                        level_readable: educationLevel.includes('СПО') ? 'Колледж' : 'Бакалавриат',
                         base: row['Base'] || row['База'] || "11 классов",
                         duration: row['Duration'] || row['Срок'] || "4 года",
                         category: row['Category'] || row['Категория'] || "Общее",
-                        tags: (row['budget_seats'] || row['Tags'] || row['Теги'] || "Бюджет").split(',').map(t => t.trim()),
+                        tags: cleanBudgetSeats.split(',').map(t => t.trim()),
                         places: parseInt(row['budget_seats'] || row['Places'] || row['Места'] || 0),
                         salary: row['Salary'] || row['Зарплата'] || "по итогам",
-                        desc: row['Description'] || row['Описание'] || "Описание программы загружается...",
+                        desc: cleanDescription,
                         // Генерируем цвет на основе категории (просто для визуала)
                         color: ['blue', 'green', 'orange', 'purple', 'indigo'][index % 5],
-                        quiz_cat: row['macrogroup_name'] || "Tech" // Default fallback
+                        quiz_cat: macrogroupName, // Default fallback
+                        url: row['url'] || "#" // Добавляем URL из CSV
                     };
-                });
+                }).filter(program => program !== null); // Фильтруем null-значения
 
                 console.log("Loaded programs from Sheet:", programs.length);
                 
@@ -3007,6 +3029,16 @@
                             </li>
                         </ul>
                     </div>
+                    
+                    <!-- Кнопка с внешней ссылкой -->
+                    ${item.url && item.url !== "#" ? `
+                    <div class="mt-6 pt-6 border-t border-slate-200">
+                        <a href="${item.url}" target="_blank" class="inline-flex items-center gap-2 bg-rgsu-700 hover:bg-rgsu-600 text-white font-medium px-6 py-3 rounded-xl transition-colors duration-300">
+                            Перейти на сайт программы
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                    ` : ''}
                 </div>
             `;
             
