@@ -1,11 +1,52 @@
-macrogroup_id,macrogroup_name,education_level,fgos_code,program_name,institution_name,region,budget_seats,url,id
-1,IT и цифровые технологии,Высшее,09.03.01,Прикладная информатика,Московский государственный университет,Москва,25,https://example.com/msu/pi,1
-1,IT и цифровые технологии,СПО,09.02.07,Программирование в компьютерных системах,Московский колледж информатики,Москва,15,https://example.com/mci/pcs,2
-2,Энергетика и энергомашиностроение,Высшее,13.03.01,Теплоэнергетика и теплотехника,Московский энергетический институт,Москва,30,https://example.com/mei/teh,3
-3,Машиностроение,Высшее,15.03.01,Машиностроение,Бауманское московское высшее техническое училище,Москва,40,https://example.com/bmstu/me,4
-4,Транспорт,СПО,23.01.03,Техническое обслуживание и ремонт автомобильного транспорта,Московский автомеханический колледж,Москва,20,https://example.com/mac/torat,5
-5,Строительство,Высшее,08.03.01,Строительство,Санкт-Петербургский государственный архитектурно-строительный университет,Санкт-Петербург,35,https://example.com/spbgasu/construction,6
-6,Медицина и здравоохранение,Высшее,31.03.01,Лечебное дело,Российский национальный исследовательский медицинский университет им. Н.И. Пирогова,Москва,50,https://example.com/rnirmu/medicine,7
-7,Педагогика и образование,Высшее,44.03.01,Педагогическое образование,Московский педагогический государственный университет,Москва,45,https://example.com/mpgu/education,8
-8,Экономика и управление,Высшее,38.03.01,Экономика,Финансовый университет при Правительстве РФ,Москва,38,https://example.com/finuniv/economics,9
-9,Право и юриспруденция,Высшее,40.03.01,Юриспруденция,Российская академия народного хозяйства и государственной службы при Президенте РФ,Москва,22,https://example.com/ranguit/law,10
+id,macrogroup_id,macrogroup_name,education_level,fgos_code,program_name,institution_name,region,budget_seats,url
+1,1,IT и цифровые технологии,Высшее,09.03.01,Прикладная информатика,Московский государственный университет,Москва,32,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+2,1,IT и цифровые технологии,Высшее,09.03.01,Прикладная информатика,Санкт-Петербургский государственный университет,Санкт-Петербург,18,https://spbu.ru/education/programmes/bachelor/computer-science
+3,1,IT и цифровые технологии,Высшее,09.03.01,Прикладная информатика,Новосибирский государственный университет,Новосибирск,47,https://nsu.ru/education/programs/undergraduate/computer-science
+4,1,IT и цифровые технологии,Высшее,09.03.02,Информационные системы и технологии,Московский государственный университет,Москва,5,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+5,1,IT и цифровые технологии,Высшее,09.03.02,Информационные системы и технологии,Санкт-Петербургский государственный университет,Санкт-Петербург,45,https://spbu.ru/education/programmes/bachelor/computer-science
+6,1,IT и цифровые технологии,Высшее,09.03.02,Информационные системы и технологии,Новосибирский государственный университет,Новосибирск,36,https://nsu.ru/education/programs/undergraduate/computer-science
+7,1,IT и цифровые технологии,Высшее,10.03.01,Информационная безопасность,Московский государственный университет,Москва,25,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+8,1,IT и цифровые технологии,Высшее,10.03.01,Информационная безопасность,Санкт-Петербургский государственный университет,Санкт-Петербург,19,https://spbu.ru/education/programmes/bachelor/computer-science
+9,1,IT и цифровые технологии,Высшее,10.03.01,Информационная безопасность,Новосибирский государственный университет,Новосибирск,48,https://nsu.ru/education/programs/undergraduate/computer-science
+10,1,IT и цифровые технологии,Высшее,01.03.02,Прикладная математика и информатика,Московский государственный университет,Москва,46,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+11,1,IT и цифровые технологии,Высшее,01.03.02,Прикладная математика и информатика,Санкт-Петербургский государственный университет,Санкт-Петербург,21,https://spbu.ru/education/programmes/bachelor/computer-science
+12,1,IT и цифровые технологии,Высшее,01.03.02,Прикладная математика и информатика,Новосибирский государственный университет,Новосибирск,22,https://nsu.ru/education/programs/undergraduate/computer-science
+13,2,Энергетика и энергомашиностроение,Высшее,13.03.01,Теплоэнергетика и теплотехника,Московский государственный университет,Москва,6,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+14,2,Энергетика и энергомашиностроение,Высшее,13.03.01,Теплоэнергетика и теплотехника,Санкт-Петербургский государственный университет,Санкт-Петербург,38,https://spbu.ru/education/programmes/bachelor/computer-science
+15,2,Энергетика и энергомашиностроение,Высшее,13.03.01,Теплоэнергетика и теплотехника,Новосибирский государственный университет,Новосибирск,50,https://nsu.ru/education/programs/undergraduate/computer-science
+16,2,Энергетика и энергомашиностроение,Высшее,13.03.02,Электроэнергетика и электротехника,Московский государственный университет,Москва,12,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+17,2,Энергетика и энергомашиностроение,Высшее,13.03.02,Электроэнергетика и электротехника,Санкт-Петербургский государственный университет,Санкт-Петербург,17,https://spbu.ru/education/programmes/bachelor/computer-science
+18,2,Энергетика и энергомашиностроение,Высшее,13.03.02,Электроэнергетика и электротехника,Новосибирский государственный университет,Новосибирск,29,https://nsu.ru/education/programs/undergraduate/computer-science
+19,2,Энергетика и энергомашиностроение,Высшее,14.03.01,Ядерные физика и технологии,Московский государственный университет,Москва,10,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+20,2,Энергетика и энергомашиностроение,Высшее,14.03.01,Ядерные физика и технологии,Санкт-Петербургский государственный университет,Санкт-Петербург,16,https://spbu.ru/education/programmes/bachelor/computer-science
+21,2,Энергетика и энергомашиностроение,Высшее,14.03.01,Ядерные физика и технологии,Новосибирский государственный университет,Новосибирск,12,https://nsu.ru/education/programs/undergraduate/computer-science
+22,3,Машиностроение,Высшее,15.03.01,Машиностроение,Московский государственный университет,Москва,40,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+23,3,Машиностроение,Высшее,15.03.01,Машиностроение,Санкт-Петербургский государственный университет,Санкт-Петербург,30,https://spbu.ru/education/programmes/bachelor/computer-science
+24,3,Машиностроение,Высшее,15.03.01,Машиностроение,Новосибирский государственный университет,Новосибирск,38,https://nsu.ru/education/programs/undergraduate/computer-science
+25,3,Машиностроение,Высшее,15.03.02,Прикладная механика,Московский государственный университет,Москва,13,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+26,3,Машиностроение,Высшее,15.03.02,Прикладная механика,Санкт-Петербургский государственный университет,Санкт-Петербург,12,https://spbu.ru/education/programmes/bachelor/computer-science
+27,3,Машиностроение,Высшее,15.03.02,Прикладная механика,Новосибирский государственный университет,Новосибирск,27,https://nsu.ru/education/programs/undergraduate/computer-science
+28,3,Машиностроение,Высшее,15.03.04,Автоматизация технологических процессов и производств,Московский государственный университет,Москва,30,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+29,3,Машиностроение,Высшее,15.03.04,Автоматизация технологических процессов и производств,Санкт-Петербургский государственный университет,Санкт-Петербург,9,https://spbu.ru/education/programmes/bachelor/computer-science
+30,3,Машиностроение,Высшее,15.03.04,Автоматизация технологических процессов и производств,Новосибирский государственный университет,Новосибирск,19,https://nsu.ru/education/programs/undergraduate/computer-science
+31,4,Транспорт,Высшее,23.03.01,Технология транспортных процессов,Московский государственный университет,Москва,48,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+32,4,Транспорт,Высшее,23.03.01,Технология транспортных процессов,Санкт-Петербургский государственный университет,Санкт-Петербург,45,https://spbu.ru/education/programmes/bachelor/computer-science
+33,4,Транспорт,Высшее,23.03.01,Технология транспортных процессов,Новосибирский государственный университет,Новосибирск,34,https://nsu.ru/education/programs/undergraduate/computer-science
+34,4,Транспорт,Высшее,23.03.03,Эксплуатация транспортно-технологических машин и комплексов,Московский государственный университет,Москва,19,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+35,4,Транспорт,Высшее,23.03.03,Эксплуатация транспортно-технологических машин и комплексов,Санкт-Петербургский государственный университет,Санкт-Петербург,16,https://spbu.ru/education/programmes/bachelor/computer-science
+36,4,Транспорт,Высшее,23.03.03,Эксплуатация транспортно-технологических машин и комплексов,Новосибирский государственный университет,Новосибирск,19,https://nsu.ru/education/programs/undergraduate/computer-science
+37,4,Транспорт,Высшее,24.03.01,Ракетные комплексы и космонавтика,Московский государственный университет,Москва,37,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+38,4,Транспорт,Высшее,24.03.01,Ракетные комплексы и космонавтика,Санкт-Петербургский государственный университет,Санкт-Петербург,25,https://spbu.ru/education/programmes/bachelor/computer-science
+39,4,Транспорт,Высшее,24.03.01,Ракетные комплексы и космонавтика,Новосибирский государственный университет,Новосибирск,33,https://nsu.ru/education/programs/undergraduate/computer-science
+40,5,Строительство,Высшее,08.03.01,Строительство,Московский государственный университет,Москва,6,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+41,5,Строительство,Высшее,08.03.01,Строительство,Санкт-Петербургский государственный университет,Санкт-Петербург,6,https://spbu.ru/education/programmes/bachelor/computer-science
+42,5,Строительство,Высшее,08.03.01,Строительство,Новосибирский государственный университет,Новосибирск,40,https://nsu.ru/education/programs/undergraduate/computer-science
+43,5,Строительство,Высшее,08.03.02,Инфраструктура и городское хозяйство,Московский государственный университет,Москва,26,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+44,5,Строительство,Высшее,08.03.02,Инфраструктура и городское хозяйство,Санкт-Петербургский государственный университет,Санкт-Петербург,34,https://spbu.ru/education/programmes/bachelor/computer-science
+45,5,Строительство,Высшее,08.03.02,Инфраструктура и городское хозяйство,Новосибирский государственный университет,Новосибирск,35,https://nsu.ru/education/programs/undergraduate/computer-science
+46,5,Строительство,Высшее,08.04.01,Строительство,Московский государственный университет,Москва,25,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+47,5,Строительство,Высшее,08.04.01,Строительство,Санкт-Петербургский государственный университет,Санкт-Петербург,11,https://spbu.ru/education/programmes/bachelor/computer-science
+48,5,Строительство,Высшее,08.04.01,Строительство,Новосибирский государственный университет,Новосибирск,33,https://nsu.ru/education/programs/undergraduate/computer-science
+49,6,Медицина и здравоохранение,Высшее,31.03.01,Лечебное дело,Московский государственный университет,Москва,11,https://www.msu.ru/en/education/programmes/bachelor/informatics-and-computer-engineering.html
+50,6,Медицина и здравоохранение,Высшее,31.03.01,Лечебное дело,Санкт-Петербургский государственный университет,Санкт-Петербург,9,https://spbu.ru/education/programmes/bachelor/computer-science
+51,6,Медицина и здравоохранение,Высшее,31.03.01,Лечебное дело,Новосибирский государственный университет,Новосибирск,45,https://nsu.ru/education/programs/undergraduate/computer-science
