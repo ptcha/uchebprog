@@ -1,1 +1,1 @@
-Nothing needs to be added to .gitignore since the changes only include source/config files (SOLUTION.md and README.md) without any build artifacts, dependencies, or temporary files.
+(data.csv and index.html are source files, no build artifacts, dependencies, or temp files in the changes)
