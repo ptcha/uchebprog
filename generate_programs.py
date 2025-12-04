@@ -17,11 +17,85 @@
 - url: Ссылка на программу
 """
 
-import requests
 import csv
 import html
 from datetime import datetime
 import sys
+import json
+import re
+
+
+def generate_program_card(program_data):
+    """
+    Генерирует JavaScript объект для одной образовательной программы
+    в формате, подходящем для использования в index.html.
+    
+    Args:
+        program_data (dict): Данные программы с ключами:
+            - 'program_name' (Название программы)
+            - 'education_level' (Уровень образования)
+            - 'institution_name' (Название учреждения)
+            - 'region' (Регион)
+            - 'budget_seats' (Бюджетные места)
+            - 'url' (Ссылка на программу)
+            - 'fgos_code' (Код специальности)
+            - 'macrogroup_name' (Название макрогруппы)
+    
+    Returns:
+        str: JavaScript объект программы
+    """
+    # Экранируем HTML-специфичные символы
+    title = html.escape(program_data.get('program_name', '').strip())
+    education_level = html.escape(program_data.get('education_level', '').strip())
+    institution = html.escape(program_data.get('institution_name', '').strip())
+    region = html.escape(program_data.get('region', '').strip())
+    budget_seats = html.escape(program_data.get('budget_seats', '').strip())
+    url = html.escape(program_data.get('url', '').strip())
+    fgos_code = html.escape(program_data.get('fgos_code', '').strip())
+    macrogroup_name = html.escape(program_data.get('macrogroup_name', '').strip())
+    
+    # Определяем уровень образования
+    level = 'VO' if 'СПО' not in education_level else 'SPO'
+    level_readable = 'Бакалавриат' if 'СПО' not in education_level else 'Колледж'
+    
+    # Обрабатываем бюджетные места для числового значения
+    places = 0
+    if budget_seats:
+        numbers = re.findall(r'\d+', budget_seats)
+        if numbers:
+            places = int(numbers[0])
+        elif 'Есть бюджетные места' in budget_seats:
+            places = 1  # условное значение
+    
+    # Формируем теги
+    tags = ['Бюджет']  # по умолчанию добавляем бюджет
+    
+    # Формируем описание
+    description = f"{macrogroup_name}" if macrogroup_name else "Описание программы загружается..."
+    
+    # Создаем JavaScript объект программы
+    program_obj = {
+        'title': title if title != '' else 'Без названия',
+        'fgos_code': fgos_code if fgos_code != '' else '—',
+        'fgos_name': macrogroup_name,
+        'institution': institution if institution != '' else 'Не указан',
+        'district': region if region != '' else 'РФ',
+        'level': level,
+        'level_readable': level_readable,
+        'base': '11 классов',  # по умолчанию
+        'duration': '4 года',  # по умолчанию
+        'category': macrogroup_name if macrogroup_name else 'Общее',
+        'tags': tags,
+        'places': places,
+        'salary': 'по итогам',
+        'desc': description,
+        'color': 'blue',  # по умолчанию
+        'quiz_cat': 'Tech',  # по умолчанию
+        'url': url  # добавляем URL
+    }
+    
+    # Возвращаем JSON-подобное представление объекта
+    return json.dumps(program_obj, ensure_ascii=False)
 
 
 def fetch_csv_data(csv_url):
@@ -63,72 +137,28 @@ def fetch_csv_data(csv_url):
         return None
 
 
-def generate_program_card(program_data):
-    """
-    Генерирует HTML-карточку для одной образовательной программы.
-    
-    Args:
-        program_data (dict): Данные программы с ключами:
-            - 'program_name' (Название программы)
-            - 'education_level' (Уровень образования)
-            - 'institution_name' (Название учреждения)
-            - 'region' (Регион)
-            - 'budget_seats' (Бюджетные места)
-            - 'url' (Ссылка на программу)
-    
-    Returns:
-        str: HTML-разметка карточки программы
-    """
-    # Экранируем HTML-специфичные символы
-    title = html.escape(program_data.get('program_name', '').strip())
-    education_level = html.escape(program_data.get('education_level', '').strip())
-    institution = html.escape(program_data.get('institution_name', '').strip())
-    region = html.escape(program_data.get('region', '').strip())
-    budget_seats = html.escape(program_data.get('budget_seats', '').strip())
-    url = html.escape(program_data.get('url', '').strip())
-    
-    # Формируем описание на основе доступных данных
-    description_parts = []
-    if education_level:
-        description_parts.append(f"Уровень: {education_level}")
-    if institution:
-        description_parts.append(f"Учреждение: {institution}")
-    if region:
-        description_parts.append(f"Регион: {region}")
-    if budget_seats:
-        description_parts.append(f"Бюджетные места: {budget_seats}")
-    
-    description = ". ".join(description_parts)
-    
-    # Формируем HTML-карточку
-    card_html = f"""<div class="program-card">
-  <h3 class="program-title">{title}</h3>
-  <p class="program-description">{description}</p>"""
-    
-    # Добавляем дополнительную информацию, если доступна
-    if education_level:
-        card_html += f"\n  <span class=\"program-duration\">Уровень: {education_level}</span>"
-    
-    # Добавляем цену, если она не пустая (в реальных данных стоимость отсутствует)
-    # Но оставляем поле для совместимости с шаблоном
-    
-    # Добавляем ссылку
-    card_html += f"""
-  <a href="{url}" class="program-link">Подробнее</a>
-</div>"""
-    
-    return card_html
 
 
 def main():
-    # URL для экспорта CSV из Google Таблицы
-    csv_url = "https://docs.google.com/spreadsheets/d/12GNjcomxxU4NbXKwQ1Jq_eG7M7PLUlDlKAnBO4qwu5g/export?format=csv&gid=0"
+    # Путь к локальному CSV файлу
+    csv_file_path = "table.csv"
     
-    print("Загрузка данных из Google Таблицы...")
-    data = fetch_csv_data(csv_url)
-    
-    if data is None:
-        print("Не удалось загрузить данные из таблицы.")
+    print("Загрузка данных из локального CSV файла...")
+    # Читаем локальный CSV файл
+    try:
+        with open(csv_file_path, 'r', encoding='utf-8') as f:
+            csv_content = f.read()
+        
+        # Парсим CSV
+        lines = csv_content.splitlines()
+        reader = csv.DictReader(lines)
+        data = list(reader)
+        
+    except FileNotFoundError:
+        print(f"Файл {csv_file_path} не найден.")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Ошибка при чтении CSV файла: {e}")
         sys.exit(1)
     
     if not data:
@@ -137,8 +167,8 @@ def main():
     
     print(f"Загружено {len(data)} записей из таблицы.")
     
-    # Генерируем HTML-карточки
-    html_cards = []
+    # Генерируем JavaScript массив программ
+    js_programs = []
     for row in data:
         # Проверяем, что основные поля присутствуют
         required_fields = ['program_name', 'url']
@@ -147,24 +177,26 @@ def main():
             print(f"Предупреждение: В строке отсутствуют или пусты обязательные поля: {missing_fields}. Пропускаем эту строку.")
             continue
         
-        card_html = generate_program_card(row)
-        html_cards.append(card_html)
+        program_obj = generate_program_card(row)
+        js_programs.append(program_obj)
     
-    if not html_cards:
-        print("Не удалось сгенерировать ни одной карточки из-за отсутствия необходимых полей в данных.")
+    if not js_programs:
+        print("Не удалось сгенерировать ни одной программы из-за отсутствия необходимых полей в данных.")
         return
     
-    # Формируем итоговый HTML-файл
+    # Формируем JavaScript код с массивом программ
     current_date = datetime.now().strftime("%d.%m.%Y")
-    header_comment = f"<!-- Сгенерировано автоматически {current_date} -->"
-    full_html = header_comment + "\n" + "\n".join(html_cards)
+    js_code = f"""// Сгенерировано автоматически {current_date}
+const programsFromCSV = [
+{',\n'.join(js_programs)}
+];"""
     
     # Сохраняем в файл
-    with open("programs.html", "w", encoding="utf-8") as f:
-        f.write(full_html)
+    with open("programs.js", "w", encoding="utf-8") as f:
+        f.write(js_code)
     
-    print(f"HTML-карточки успешно сгенерированы и сохранены в файл programs.html")
-    print(f"Сгенерировано {len(html_cards)} карточек.")
+    print(f"JavaScript массив программ успешно сгенерирован и сохранен в файл programs.js")
+    print(f"Сгенерировано {len(js_programs)} программ.")
 
 
 if __name__ == "__main__":
