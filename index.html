@@ -2683,8 +2683,7 @@
         let programs = []; // Main data array
 
         // === ЛОГИКА ЗАГРУЗКИ ДАННЫХ ===
-        const SHEET_ID = '12GNjcomxxU4NbXKwQ1Jq_eG7M7PLUlDlKAnBO4qwu5g';
-        const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0`;
+        // Using local data.csv file instead of Google Sheets
 
         async function loadData() {
             // Показываем скелетоны
@@ -2696,9 +2695,9 @@
             `;
 
             try {
-                // Пробуем загрузить CSV
-                const response = await fetch(SHEET_CSV_URL);
-                if (!response.ok) throw new Error('Network response was not ok');
+                // Пробуем загрузить локальный CSV файл
+                const response = await fetch('data.csv');
+                if (!response.ok) throw new Error('Local CSV file not found');
                 const csvText = await response.text();
                 
                 // Парсим CSV
@@ -2710,24 +2709,24 @@
                     // Попытка умного маппинга (адаптируйте ключи под реальные заголовки таблицы)
                     // Если в таблице заголовки на русском, используем их
                     return {
-                        id: index + 100, // offset ID
-                        title: row['Program_Name'] || row['Название'] || row['title'] || "Без названия",
-                        fgos_code: row['FGOS_Code'] || row['Код'] || "—",
-                        fgos_name: row['FGOS_Name'] || row['Специальность'] || "",
-                        institution: row['Institution_Name'] || row['ВУЗ'] || "Не указан",
-                        district: row['District'] || row['ФО'] || "РФ",
-                        level: (row['Level'] || row['Уровень'] || "").includes('СПО') ? 'SPO' : 'VO',
-                        level_readable: (row['Level'] || row['Уровень'] || "").includes('СПО') ? 'Колледж' : 'Бакалавриат',
+                        id: parseInt(row['id']) || index + 100, // offset ID
+                        title: row['program_name'] || row['Program_Name'] || row['Название'] || row['title'] || "Без названия",
+                        fgos_code: row['fgos_code'] || row['FGOS_Code'] || row['Код'] || "—",
+                        fgos_name: row['fgos_name'] || row['FGOS_Name'] || row['Специальность'] || "",
+                        institution: row['institution_name'] || row['Institution_Name'] || row['ВУЗ'] || "Не указан",
+                        district: row['region'] || row['District'] || row['ФО'] || "РФ",
+                        level: (row['education_level'] || row['Level'] || row['Уровень'] || "").includes('СПО') ? 'SPO' : 'VO',
+                        level_readable: (row['education_level'] || row['Level'] || row['Уровень'] || "").includes('СПО') ? 'Колледж' : 'Бакалавриат',
                         base: row['Base'] || row['База'] || "11 классов",
                         duration: row['Duration'] || row['Срок'] || "4 года",
                         category: row['Category'] || row['Категория'] || "Общее",
-                        tags: (row['Tags'] || row['Теги'] || "Бюджет").split(',').map(t => t.trim()),
-                        places: parseInt(row['Places'] || row['Места'] || 0),
+                        tags: (row['budget_seats'] || row['Tags'] || row['Теги'] || "Бюджет").split(',').map(t => t.trim()),
+                        places: parseInt(row['budget_seats'] || row['Places'] || row['Места'] || 0),
                         salary: row['Salary'] || row['Зарплата'] || "по итогам",
                         desc: row['Description'] || row['Описание'] || "Описание программы загружается...",
                         // Генерируем цвет на основе категории (просто для визуала)
                         color: ['blue', 'green', 'orange', 'purple', 'indigo'][index % 5],
-                        quiz_cat: "Tech" // Default fallback
+                        quiz_cat: row['macrogroup_name'] || "Tech" // Default fallback
                     };
                 });
 
@@ -2738,7 +2737,7 @@
                 showDataSource("");
 
             } catch (error) {
-                console.warn("Failed to load Google Sheet data, using fallback.", error);
+                console.warn("Failed to load local CSV data, using fallback.", error);
                 programs = fallbackPrograms;
                 showDataSource("Резервная база данных (Демо)");
             } finally {
